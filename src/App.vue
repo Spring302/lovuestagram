@@ -5,10 +5,11 @@
         <li @click="cancle">Cancel</li>
       </ul>
       <ul class="header-button-right">
-        <li v-if="step == 0">
+        <!-- <li v-if="step == 0">
           <input @change="upload" type="file" id="file" class="inputfile" />
           <label for="file" class="input-plus">글작성</label>
-        </li>
+        </li> -->
+        <li v-if="step == 0" @click="step++">글작성</li>
         <li v-if="step == 1" @click="step++">Next</li>
         <li v-if="step == 2" @click="publish">발행</li>
       </ul>
