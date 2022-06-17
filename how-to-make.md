@@ -60,3 +60,20 @@ actions의 함수 호출은 다음과 같이 한다.
 ```html
   <button @click="$store.dispatch('더보기')">더보기</button>
 ```
+
+##  vuex data computed 로 쉽게 쓰기
+
+```html
+...mapState(['name','age','likes']),
+```
+
+## pwa 기능을 제공하는 라이브러리
+> vue add pwa
+
+설치후 build하면 자동으로 pwa 기능 제공
+
+## Options API
+지금처럼 computed, methods .... 
+
+## Compotision API
+관련있는 코드를 한 곳에 모을 수 있다.

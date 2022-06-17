@@ -1,32 +1,25 @@
 <template>
-  <div class="header">
-    <ul class="header-button-left">
-      <li>Cancel</li>
-    </ul>
-    <ul class="header-button-right">
-      <li v-if="step == 1" @click="step++">Next</li>
-      <li v-if="step == 2" @click="publish">발행</li>
-    </ul>
-    <img src="./assets/logo.png" class="logo" />
-  </div>
-
-  <h4>안녕 {{ $store.state.name }}</h4>
-  <button @click="$store.commit('이름변경')">이름변경</button>
-  <h4>{{$store.state.age}}년 동안 수고많았어!</h4>
-  <button @click="$store.commit('나이변경', 10)">나이변경</button>
-  <p>{{$store.state.more}}</p>
-  <button @click="$store.dispatch('getData')">더보기</button>
-
-  <!-- <div><button @click="step = 0">게시글</button><button @click="step = 1">이미지필터선택</button><button @click="step = 2">글작성</button></div> -->
-  <Container :filter="filter" :instaData="instaData" :step="step" :uploadImage="uploadImage" @write="작성한글 = $event" />
-
-  <button @click="more">더보기</button>
-
-  <div class="footer">
-    <ul class="footer-button-plus">
-      <input @change="upload" type="file" id="file" class="inputfile" />
-      <label for="file" class="input-plus">+</label>
-    </ul>
+  <div>
+    <div class="header">
+      <ul class="header-button-left">
+        <li @click="cancle">Cancel</li>
+      </ul>
+      <ul class="header-button-right">
+        <li v-if="step == 0">
+          <input @change="upload" type="file" id="file" class="inputfile" />
+          <label for="file" class="input-plus">글작성</label>
+        </li>
+        <li v-if="step == 1" @click="step++">Next</li>
+        <li v-if="step == 2" @click="publish">발행</li>
+      </ul>
+      <img src="./assets/logo.png" class="logo" />
+    </div>
+    <Container :filter="filter" :instaData="instaData" :step="step" :uploadImage="uploadImage" @write="작성한글 = $event" />
+    <div v-if="step == 0" class="footer">
+      <ul class="footer-button-plus">
+        <label @click="more" class="input-plus">+</label>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -34,6 +27,7 @@
 import Container from "@/components/Container.vue";
 import instaData from "@/assets/instaData";
 import axios from "axios";
+import { mapMutations, mapState } from "vuex";
 
 export default {
   name: "App",
@@ -48,9 +42,11 @@ export default {
       uploadImage: "",
       작성한글: "",
       filter: "",
+      카운터: 0,
     };
   },
   methods: {
+    ...mapMutations(["setMore", "이름변경", "나이변경", "좋아요"]),
     more() {
       axios.get(`https://codingapple1.github.io/vue/more${this.page}.json`).then((res) => {
         console.log(res.data);
@@ -80,6 +76,23 @@ export default {
       this.instaData.unshift(myPost);
       this.step = 0;
     },
+    cancle() {
+      if (this.step == 1) {
+        this.uploadImage = "";
+      }
+      if (this.step > 0) {
+        this.step--;
+      }
+    },
+  },
+  //계산절약용. 한번 사용하면 변경 전까지 계산없이 재사용 가능함
+  //computed 함수는 return이 반드시 필요하다. 결과 내뱉는게 주 목적
+  computed: {
+    name() {
+      return this.$store.state.name;
+    },
+    // vuex data computed 로 쉽게 쓰기 (위 함수 축약형)
+    ...mapState(["name", "age", "likes"]),
   },
   mounted() {
     this.emitter.on("박스클릭함", (filter) => {
@@ -125,7 +138,7 @@ ul {
 .header-button-right {
   color: skyblue;
   float: right;
-  width: 50px;
+  width: 70px;
   cursor: pointer;
   margin-top: 10px;
 }

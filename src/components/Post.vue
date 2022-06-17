@@ -2,13 +2,15 @@
   <div class="post">
     <div class="post-header">
       <div class="profile"></div>
-      <span class="profile-name">{{data.name}}</span>
+      <span class="profile-name">{{ data.name }}</span>
     </div>
-    <div class="post-body" :class="data.filter" :style="{backgroundImage:`url(${data.postImage})`}" @click="$store.commit('좋아요')"></div>
+    <div class="post-body" :class="data.filter" :style="{ backgroundImage: `url(${data.postImage})` }" @click="$store.commit('좋아요')"></div>
     <div class="post-content">
-      <p>{{$store.state.likes}} Likes</p>
-      <p><strong>{{data.name}}</strong> {{data.content}}</p>
-      <p class="date">{{data.date}}</p>
+      <p>{{ $store.state.likes }} Likes</p>
+      <p>
+        <strong>{{ data.name }}</strong> {{ data.content }}
+      </p>
+      <p class="date">{{ data.date }}</p>
     </div>
   </div>
 </template>
@@ -18,13 +20,16 @@ export default {
   props: {
     data: Object,
     filter: String,
-  }
+  },
 };
 </script>
 
 <style>
 .post {
   width: 100%;
+  border: 1px solid lightgray;
+  border-radius: 20px;
+  margin: 10px 0;
 }
 .profile {
   background-image: url("https://placeimg.com/100/100/arch");
@@ -42,14 +47,16 @@ export default {
   font-size: 14px;
 }
 .post-header {
-  height: 30px;
+  height: 50px;
   padding: 10px;
 }
 .post-body {
-  background-image: url("https://placeimg.com/640/480/animals");
-  height: 450px;
-  background-position: center;
-  background-size: cover;
+  height: 0;
+  padding: 0; /* remove any pre-existing padding, just in case */
+  padding-bottom: 75%; /* for a 4:3 aspect ratio */
+  background-position: center center;
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 .post-content {
   padding-left: 15px;

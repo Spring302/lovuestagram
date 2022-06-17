@@ -1,4 +1,4 @@
-# vuestagram
+# lovuestagram
 
 ## Project setup
 ```
