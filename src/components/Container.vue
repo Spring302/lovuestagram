@@ -5,8 +5,23 @@
         <Post v-for="(data, i) in instaData" :key="i" :data="data" />
       </div>
     </div>
-    <!-- 필터선택페이지 -->
+    <!-- 글작성페이지 -->
     <div v-if="step == 1">
+      <div class="border">
+        <div v-if="uploadImage" class="upload-image" :class="filter" :style="{ backgroundImage: `url(${uploadImage})` }"></div>
+        <div v-else class="empty-image">
+          <p>사진을 아래에 끌어다 놓으세요</p>
+          <DropZone class="dropzone" :maxFiles="1" @addedFile="onFileAdd" :uploadOnDrop="false" />
+        </div>
+      </div>
+      <div class="border">
+        <div class="write">
+          <textarea v-model="writeText" @input="$emit('write', writeText)" class="write-box" placeholder="문구 입력..."></textarea>
+        </div>
+      </div>
+    </div>
+    <!-- 필터선택페이지 -->
+    <div v-if="step == 2">
       <div class="border">
         <div class="upload-image" :class="filter" :style="{ backgroundImage: `url(${uploadImage})` }"></div>
         <p class="text-center border">필터</p>
@@ -14,17 +29,6 @@
           <FilterBox v-for="(filter, i) in filters" :key="i" :filter="filter" :uploadImage="uploadImage">
             <span class="filter-name">{{ filter }}</span>
           </FilterBox>
-        </div>
-      </div>
-    </div>
-    <!-- 글작성페이지 -->
-    <div v-if="step == 2">
-      <div class="border">
-        <div class="upload-image" :class="filter" :style="{ backgroundImage: `url(${uploadImage})` }"></div>
-      </div>
-      <div class="border">
-        <div class="write">
-          <textarea v-model="writeText" @input="$emit('write', writeText)" class="write-box" placeholder="문구 입력..."></textarea>
         </div>
       </div>
     </div>
@@ -38,12 +42,14 @@
 import Post from "@/components/Post.vue";
 import FilterBox from "@/components/FilterBox.vue";
 import MyPage from "@/components/MyPage.vue";
+import DropZone from "dropzone-vue";
 
 export default {
   components: {
     Post,
     FilterBox,
     MyPage,
+    DropZone,
   },
   props: {
     instaData: Array,
@@ -57,16 +63,34 @@ export default {
       filters: ["aden", "_1977", "brannan", "brooklyn", "clarendon", "earlybird", "gingham", "hudson", "inkwell", "kelvin", "lark", "lofi", "maven", "mayfair", "moon", "nashville", "perpetua", "reyes", "rise", "slumber", "stinson", "toaster", "valencia", "walden", "willow", "xpro2"],
     };
   },
+  methods: {
+    onFileAdd(e) {
+      let 파일 = e.file;
+      let url = URL.createObjectURL(파일);
+      console.log(url);
+      this.$emit("upload", url);
+    },
+  },
 };
 </script>
 
-<style>
+<style scoped>
+p {
+  margin: 0 auto;
+  text-align: center;
+  color: #555;
+  font-weight:bold;
+}
+.dropzone {
+  height: 400px;
+  cursor: pointer;
+}
 .upload-image {
   height: 0;
   padding: 0; /* remove any pre-existing padding, just in case */
   padding-bottom: 75%; /* for a 4:3 aspect ratio */
   background-position: center center;
-  background-size: 100%;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
 }
 .filters {

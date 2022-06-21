@@ -4,7 +4,10 @@
       <div class="profile"></div>
       <span class="profile-name">{{ data.name }}</span>
     </div>
-    <div class="post-body" :class="data.filter" :style="{ backgroundImage: `url(${data.postImage})` }" @click="$store.commit('좋아요')"></div>
+    <!-- <div class="post-body" :class="data.filter" :style="{ backgroundImage: `url(${data.postImage})` }" @click="$store.commit('좋아요')"></div> -->
+    <figure :class="data.filter" @click="$store.commit('좋아요')">
+      <img :src="data.postImage" class="img-post-body" alt="" />
+    </figure>
     <div class="post-content">
       <p>{{ $store.state.likes }} Likes</p>
       <p>
@@ -55,8 +58,12 @@ export default {
   padding: 0; /* remove any pre-existing padding, just in case */
   padding-bottom: 75%; /* for a 4:3 aspect ratio */
   background-position: center center;
-  background-size: 100%;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
+}
+.img-post-body {
+  width: 100%;
+  object-fit: contain;
 }
 .post-content {
   padding-left: 15px;

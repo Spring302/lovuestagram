@@ -5,17 +5,14 @@
         <li @click="cancle">Cancel</li>
       </ul>
       <ul class="header-button-right">
-        <!-- <li v-if="step == 0">
-          <input @change="upload" type="file" id="file" class="inputfile" />
-          <label for="file" class="input-plus">글작성</label>
-        </li> -->
         <li v-if="step == 0" @click="step++">글작성</li>
-        <li v-if="step == 1" @click="step++">Next</li>
+        <li v-if="step == 1 && uploadImage" @click="step++">Next</li>
+        <!-- <li v-if="step == 1 && !uploadImage" @click="publish">발행</li> -->
         <li v-if="step == 2" @click="publish">발행</li>
       </ul>
       <img src="./assets/logo.png" class="logo" />
     </div>
-    <Container :filter="filter" :instaData="instaData" :step="step" :uploadImage="uploadImage" @write="작성한글 = $event" />
+    <Container :filter="filter" :instaData="instaData" :step="step" :uploadImage="uploadImage" @write="작성한글 = $event" @upload="uploadImage = $event" />
     <div v-if="step == 0" class="footer">
       <ul class="footer-button-plus">
         <label @click="more" class="input-plus">+</label>
@@ -54,14 +51,6 @@ export default {
         this.instaData.push(res.data);
         this.page += 1;
       });
-    },
-    upload(e) {
-      let 파일 = e.target.files;
-      console.log(파일);
-      let url = URL.createObjectURL(파일[0]);
-      console.log(url);
-      this.uploadImage = url;
-      this.step++;
     },
     publish() {
       var myPost = {
@@ -107,7 +96,7 @@ export default {
 body {
   margin: 0;
 }
-ul {
+.header > ul {
   padding: 5px;
   list-style-type: none;
 }
@@ -122,11 +111,13 @@ ul {
 }
 .header {
   width: 100%;
-  height: 40px;
+  height: 50px;
   background-color: white;
+  border-bottom: 1px solid #eee;
   padding-bottom: 8px;
   position: sticky;
   top: 0;
+  z-index: 1;
 }
 .header-button-left {
   color: skyblue;
