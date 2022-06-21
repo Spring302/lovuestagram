@@ -2,20 +2,20 @@
   <div>
     <div class="header">
       <ul class="header-button-left">
-        <li @click="cancle">Cancel</li>
+        <li @click="cancel()">Cancel</li>
       </ul>
       <ul class="header-button-right">
-        <li v-if="step == 0" @click="step++">글작성</li>
-        <li v-if="step == 1 && uploadImage" @click="step++">Next</li>
+        <li v-if="step == 0" @click="addStep(1)">글작성</li>
+        <li v-if="step == 1 && uploadImage" @click="addStep(1)">Next</li>
         <!-- <li v-if="step == 1 && !uploadImage" @click="publish">발행</li> -->
         <li v-if="step == 2" @click="publish">발행</li>
       </ul>
       <img src="./assets/logo.png" class="logo" />
     </div>
-    <Container :filter="filter" :instaData="instaData" :step="step" :uploadImage="uploadImage" @write="작성한글 = $event" @upload="uploadImage = $event" />
+    <Container />
     <div v-if="step == 0" class="footer">
       <ul class="footer-button-plus">
-        <label @click="more" class="input-plus">+</label>
+        <label @click="getData" class="input-plus">+</label>
       </ul>
     </div>
   </div>
@@ -23,9 +23,7 @@
 
 <script>
 import Container from "@/components/Container.vue";
-import instaData from "@/assets/instaData";
-import axios from "axios";
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
 
 export default {
   name: "App",
@@ -33,61 +31,14 @@ export default {
     Container,
   },
   data() {
-    return {
-      instaData,
-      page: 0,
-      step: 0,
-      uploadImage: "",
-      작성한글: "",
-      filter: "",
-      카운터: 0,
-    };
+    return {};
   },
   methods: {
-    ...mapMutations(["setMore", "이름변경", "나이변경", "좋아요"]),
-    more() {
-      axios.get(`https://codingapple1.github.io/vue/more${this.page}.json`).then((res) => {
-        console.log(res.data);
-        this.instaData.push(res.data);
-        this.page += 1;
-      });
-    },
-    publish() {
-      var myPost = {
-        name: "Kim Hyun",
-        userImage: "https://placeimg.com/100/100/arch",
-        postImage: this.uploadImage,
-        likes: 36,
-        date: "May 15",
-        liked: false,
-        content: this.작성한글,
-        filter: this.filter,
-      };
-      this.instaData.unshift(myPost);
-      this.step = 0;
-    },
-    cancle() {
-      if (this.step == 1) {
-        this.uploadImage = "";
-      }
-      if (this.step > 0) {
-        this.step--;
-      }
-    },
+    ...mapMutations(["upload", "addStep", "addPage", "publish", "cancel"]),
+    ...mapActions(["getData"]),
   },
-  //계산절약용. 한번 사용하면 변경 전까지 계산없이 재사용 가능함
-  //computed 함수는 return이 반드시 필요하다. 결과 내뱉는게 주 목적
   computed: {
-    name() {
-      return this.$store.state.name;
-    },
-    // vuex data computed 로 쉽게 쓰기 (위 함수 축약형)
-    ...mapState(["name", "age", "likes"]),
-  },
-  mounted() {
-    this.emitter.on("박스클릭함", (filter) => {
-      this.filter = filter;
-    });
+    ...mapState(["instaData", "page", "step", "uploadImage",]),
   },
 };
 </script>
