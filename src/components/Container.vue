@@ -8,7 +8,7 @@
     <!-- 글작성페이지 -->
     <div v-if="step == 1">
       <div class="border">
-        <div v-if="uploadImage" class="upload-image" :class="filter" :style="backgroundImage"></div>
+        <div v-if="uploadImage" class="upload-image" :class="filter" :style="getImageStyle"></div>
         <div v-else>
           <p>사진을 아래에 끌어다 놓으세요</p>
           <DropZone class="dropzone" :maxFiles="1" @addedFile="onFileAdd" :uploadOnDrop="false" />
@@ -23,7 +23,7 @@
     <!-- 필터선택페이지 -->
     <div v-if="step == 2">
       <div class="border">
-        <div class="upload-image" :class="filter" :style="backgroundImage"></div>
+        <div class="upload-image" :class="filter" :style="getImageStyle"></div>
         <p class="text-center border">필터</p>
         <div class="filters">
           <FilterBox v-for="(filter, i) in filters" :key="i" :filter="filter" :uploadImage="uploadImage">
@@ -32,32 +32,22 @@
         </div>
       </div>
     </div>
-    <div v-if="step == 3">
-      <MyPage :one="1" />
-    </div>
   </div>
 </template>
 
 <script>
 import Post from "@/components/Post.vue";
 import FilterBox from "@/components/FilterBox.vue";
-import MyPage from "@/components/MyPage.vue";
 import DropZone from "dropzone-vue";
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapState, mapGetters } from "vuex";
 
 export default {
   components: {
     Post,
     FilterBox,
-    MyPage,
     DropZone,
   },
-  props: {
-    // instaData: Array,
-    // step: Number,
-    // uploadImage: String,
-    // filter: String,
-  },
+  props: {},
   data() {
     return {
       text: "",
@@ -74,9 +64,7 @@ export default {
     },
   },
   computed: {
-    backgroundImage: function () {
-      return { backgroundImage: `url(${this.$store.state.uploadImage}` };
-    },
+    ...mapGetters(["getImageStyle"]),
     ...mapState(["instaData", "step", "uploadImage", "writeText", "filter"]),
   },
 };

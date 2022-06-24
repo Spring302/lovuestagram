@@ -4,10 +4,10 @@
       <div class="profile"></div>
       <span class="profile-name">{{ data.name }}</span>
     </div>
-    <!-- <div class="post-body" :class="data.filter" :style="{ backgroundImage: `url(${data.postImage})` }" @click="$store.commit('좋아요')"></div> -->
-    <figure :class="data.filter" @click="$store.commit('좋아요')">
+    <div class="post-body" :class="data.filter" :style="{ backgroundImage: `url(${data.postImage})` }" @click="$store.commit('좋아요')"></div>
+    <!-- <figure :class="data.filter" @click="$store.commit('좋아요')">
       <img :src="data.postImage" class="img-post-body" alt="" />
-    </figure>
+    </figure> -->
     <div class="post-content">
       <p>{{ $store.state.likes }} Likes</p>
       <p>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     data: Object,

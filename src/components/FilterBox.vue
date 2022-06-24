@@ -1,11 +1,11 @@
 <template>
-  <div @click="setFilter(this.filter)" class="filter-item" :class="filter" :style="backgroundImage">
+  <div @click="setFilter(this.filter)" class="filter-item" :class="filter" :style="getImageStyle">
     <slot></slot>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from "vuex";
+import { mapMutations, mapGetters } from "vuex";
 
 export default {
   name: "filterbox",
@@ -17,9 +17,7 @@ export default {
     ...mapMutations(["write", "setFilter"]),
   },
   computed: {
-    backgroundImage: function () {
-      return { backgroundImage: `url(${this.$store.state.uploadImage}` };
-    },
+    ...mapGetters(["getImageStyle"]),
   },
 };
 </script>

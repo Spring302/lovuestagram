@@ -25,13 +25,13 @@ const store = createStore({
     },
     setFilter(state, data) {
       state.filter = data;
-    },    
+    },
     addPage(state) {
       state.page += 1;
     },
     addStep(state, data) {
       state.step += data;
-    },    
+    },
     publish(state) {
       var myPost = {
         name: "Kim Hyun",
@@ -45,6 +45,9 @@ const store = createStore({
       };
       state.instaData.unshift(myPost);
       state.step = 0;
+      state.uploadImage = "";
+      state.writeText = "";
+      state.filter = "";
     },
     cancel(state) {
       if (state.step == 1) {
@@ -55,7 +58,12 @@ const store = createStore({
       }
     },
     write(state, data) {
-      state.writeText = data
+      state.writeText = data;
+    },
+  },
+  getters: {
+    getImageStyle: function (state) {
+      return { backgroundImage: `url(${state.uploadImage}` };
     },
   },
   // ajax 하는 곳 혹은 오래걸리는 작업들
