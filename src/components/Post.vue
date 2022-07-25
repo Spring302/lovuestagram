@@ -9,7 +9,7 @@
       <img :src="data.postImage" class="img-post-body" alt="" />
     </figure> -->
     <div class="post-content">
-      <p>{{ $store.state.likes }} Likes</p>
+      <p>{{ data.likes }} Likes</p>
       <p>
         <strong>{{ data.name }}</strong> {{ data.content }}
       </p>
